@@ -137,6 +137,7 @@ def calculate_metrics(Y_valid, Y_pred, dataset="Test"):
 # Then call it
 results = calculate_metrics(Y_valid, Y_pred, "Linear Regression")
 
+#interface is incompleted
 root = tk.Tk()
 root.title("House Price Prediction")
 root.geometry("400x400")
