@@ -136,3 +136,61 @@ def calculate_metrics(Y_valid, Y_pred, dataset="Test"):
 
 # Then call it
 results = calculate_metrics(Y_valid, Y_pred, "Linear Regression")
+
+root = tk.Tk()
+root.title("House Price Prediction")
+root.geometry("400x400")
+entries={}
+
+def create_input_fields():
+    row = 0
+    for col in X.columns[:5]:
+        entry = tk.Entry(root)
+        entries[col] = entry
+        row += 1
+
+create_input_fields()
+
+tk.Label(root, text="Area").grid(row=0, column=0)
+LotArea = tk.Entry(root)
+LotArea.grid(row=0, column=1)
+
+tk.Label(root, text="Year Built").grid(row=1, column=0)
+YearBuilt = tk.Entry(root)
+YearBuilt.grid(row=1, column=1)
+
+tk.Label(root, text="Year Modified").grid(row=2, column=0)
+YearRemodified = tk.Entry(root)
+YearRemodified.grid(row=2, column=1)
+
+
+def predict_price():
+    try:
+        area = float(LotArea.get())
+        yearbuild = int(YearBuilt.get())
+        modified = int(YearRemodified.get())
+
+        input_df = pd.DataFrame([{
+            "LotArea": area,
+            "YearBuilt": yearbuild,
+            "YearRemodAdd": modified
+        }])
+
+
+        final_input = input_df.reindex(columns=X.columns, fill_value=0)
+
+        prediction = model_RFR.predict(final_input)
+
+        result_label.config(text=f"Price: {prediction[0]:,.2f}")
+
+    except:
+        messagebox.showerror("Error", "Please enter valid numeric values")
+
+
+tk.Button(root, text="Predict Price", command=predict_price, bg="green", fg="white").grid(row=10, column=0, columnspan=2, pady=20)
+
+# Result label
+result_label = tk.Label(root, text="Prediction will appear here", font=("Arial", 12))
+result_label.grid(row=11, column=0, columnspan=2)
+
+root.mainloop()
